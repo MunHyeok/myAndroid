@@ -132,6 +132,7 @@ private:
     static int RegisterCells( IplImage *max)
     {
         m_nCells = 0;
+        m_cell = new CColonyCell[10000];
         for( int y=0 ; y<cvHeight(max) ; y++ ) {
             unsigned char *c = cvGetPixelPtr(max, 0, y );
             for( int x=0 ; x<cvWidth(max) ; x++ ) {

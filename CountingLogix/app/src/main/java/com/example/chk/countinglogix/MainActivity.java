@@ -48,6 +48,8 @@ public class MainActivity extends CLActivity
     private TextView tv_thres;
     private boolean rangeBtnRunning = false;
     private boolean isBinary = false;
+    private boolean addBtnRunning = false;
+
     private  boolean imageExist = false;
     private int size;
     private int sum_thres_colony;
@@ -127,7 +129,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 }
                 return true;
             case R.id.item_binary:
-                if (imageExist && !rangeBtnRunning) {
+                if (imageExist && !rangeBtnRunning && !addBtnRunning) {
                     initThreshold();
                     makeBinary(0);
                     isBinary = true;
@@ -137,7 +139,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 }
                 return true;
             case R.id.item_camera:
-                if(!rangeBtnRunning){
+                if(!rangeBtnRunning && !addBtnRunning){
                     Intent intentCamera = new Intent(MainActivity.this, CLCameraActivity.class);
                     intentCamera.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intentCamera);
@@ -147,7 +149,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 }
                 return true;
             case R.id.item_album:
-                if (!rangeBtnRunning) {
+                if (!rangeBtnRunning && !addBtnRunning) {
                     intent = new Intent(Intent.ACTION_PICK);
                     intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
                     intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -157,7 +159,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 }
                 return true;
             case R.id.item_setting:
-                if(!rangeBtnRunning){
+                if(!rangeBtnRunning && !addBtnRunning){
                     Intent intentSetting = new Intent(MainActivity.this, CLSettingActivity.class);
                     startActivity(intentSetting);
                 }
@@ -463,7 +465,10 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 public void onClick(View v) {
                     if(imageExist)//버튼이 사용가능한 상태면
                     {
-                        if(!rangeBtnRunning)//범위버튼이 작동하고 있는지 아닌지
+                        if(addBtnRunning){
+                            invalidClickToast();
+                        }
+                        else if(!rangeBtnRunning)//범위버튼이 작동하고 있는지 아닌지
                         {
                             mAttacher.cleanup();
                             iv_colony.setOnTouchListener(touch);
@@ -494,7 +499,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 }
             });
 
-            Button btn_add = (Button)findViewById(R.id.btn_add);
+            final Button btn_add = (Button)findViewById(R.id.btn_add);
             btn_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -502,15 +507,21 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                     {
                         if(rangeBtnRunning)//범위버튼이 작동하고 있는지 아닌지
                         {
-
+                            invalidClickToast();
                         }
-                        else if(isBinary){
-
-                        }
-                        else
+                        else if(btn_add.getText().equals("추가"))
                         {
                             mAttacher.cleanup();
                             iv_colony.setOnTouchListener(touchedCoordinate);
+                            btn_add.setText("완료");
+                            addBtnRunning = true;
+                        }
+                        else if(btn_add.getText().equals("완료"))
+                        {
+                            iv_colony.setOnTouchListener(null);
+                            mAttacher = new PhotoViewAttacher(iv_colony);
+                            btn_add.setText("추가");
+                            addBtnRunning = false;
                         }
                     }
                     else
