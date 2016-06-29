@@ -1,6 +1,6 @@
-D:/MunHyeok/Colony/CountingLogix/app/src/main/obj/local/armeabi/objs-debug/CountingLogix/jni_part.o: \
- D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/jni_part.cpp \
- D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/ColonyCalculator.h \
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/obj/local/armeabi/objs-debug/CountingLogix/jni_part.o: \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/jni_part.cpp \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/ColonyCalculator.h \
  ../../sdk/native/jni/include/opencv2/core/core.hpp \
  ../../sdk/native/jni/include/opencv2/core.hpp \
  ../../sdk/native/jni/include/opencv2/core/cvdef.h \
@@ -44,9 +44,9 @@ D:/MunHyeok/Colony/CountingLogix/app/src/main/obj/local/armeabi/objs-debug/Count
  ../../sdk/native/jni/include/opencv2/flann/miniflann.hpp \
  ../../sdk/native/jni/include/opencv2/flann/defines.h \
  ../../sdk/native/jni/include/opencv2/flann/config.h \
- D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/ColonyTool.h \
- D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/GelBase.h \
- D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/Img.h \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/ColonyTool.h \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/GelBase.h \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Img.h \
  ../../sdk/native/jni/include/opencv/cv.h \
  ../../sdk/native/jni/include/opencv2/photo/photo_c.h \
  ../../sdk/native/jni/include/opencv2/video/tracking_c.h \
@@ -57,14 +57,14 @@ D:/MunHyeok/Colony/CountingLogix/app/src/main/obj/local/armeabi/objs-debug/Count
  ../../sdk/native/jni/include/opencv2/highgui/highgui_c.h \
  ../../sdk/native/jni/include/opencv2/imgcodecs/imgcodecs_c.h \
  ../../sdk/native/jni/include/opencv2/videoio/videoio_c.h \
- D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/cimUtils.h \
- D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/GelLane.h \
- D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/GelBand.h \
- D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/Blob.h \
- D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/BlobArea.h \
- D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/ColonyCell.h
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/cimUtils.h \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/GelLane.h \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/GelBand.h \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Blob.h \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/BlobArea.h \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/ColonyCell.h
 
-D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/ColonyCalculator.h:
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/ColonyCalculator.h:
 
 ../../sdk/native/jni/include/opencv2/core/core.hpp:
 
@@ -152,11 +152,11 @@ C:/Users/CHK/AppData/Local/Android/sdk/ndk-bundle/build//../sources/cxx-stl/gnu-
 
 ../../sdk/native/jni/include/opencv2/flann/config.h:
 
-D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/ColonyTool.h:
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/ColonyTool.h:
 
-D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/GelBase.h:
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/GelBase.h:
 
-D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/Img.h:
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Img.h:
 
 ../../sdk/native/jni/include/opencv/cv.h:
 
@@ -178,14 +178,14 @@ C:/Users/CHK/AppData/Local/Android/sdk/ndk-bundle/build//../sources/cxx-stl/gnu-
 
 ../../sdk/native/jni/include/opencv2/videoio/videoio_c.h:
 
-D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/cimUtils.h:
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/cimUtils.h:
 
-D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/GelLane.h:
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/GelLane.h:
 
-D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/GelBand.h:
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/GelBand.h:
 
-D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/Blob.h:
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Blob.h:
 
-D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/BlobArea.h:
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/BlobArea.h:
 
-D:/MunHyeok/Colony/CountingLogix/app/src/main/jni/ColonyCell.h:
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/ColonyCell.h:

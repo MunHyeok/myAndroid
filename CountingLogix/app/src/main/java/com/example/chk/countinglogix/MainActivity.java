@@ -402,10 +402,18 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
     }
 
     private void resizeImage(){
+
         int imageWidth = image_bitmap.getWidth();
         int imageHeight = image_bitmap.getHeight();
         int deviceWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-        int deviceHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        int deviceHeight;
+        if (GlobalInfo.diagonalInches>=6.5){
+            deviceHeight = Resources.getSystem().getDisplayMetrics().heightPixels - (getActionBar().getHeight() + getStatusBarHeight());
+
+        }else{
+            deviceHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        }
+
 
         if(imageWidth > deviceWidth || imageHeight > deviceHeight){
 
