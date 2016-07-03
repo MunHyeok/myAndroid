@@ -28,7 +28,7 @@ public class CLActivity extends Activity {
         super.onCreate(savedInstanceState);
     }
 
-    public int getStatusBarHeight() {
+    protected int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {

@@ -18,7 +18,7 @@ public:
     ~CColonyCell(void)	{}
 
     bool	 IsSelected()	{ return m_bFlag; }
-    CvPoint& Center()		{ return m_center;}
+    CvPoint Center()		{ return m_center;}
     float&	 Radius()		{ return m_radius;}
 
     void Set(int x, int y, float radius, bool bValid=true, bool bFlag=false) { Set(cvPoint(x,y), radius, bValid, bFlag); }

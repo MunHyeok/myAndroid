@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,20 +45,29 @@ public class MainActivity extends CLActivity
     private ImageView iv_colony;
     private TextView tv_count;
     private TextView tv_thres;
+    private Intent intent;
+    private Bitmap image_bitmap;
+    private Bitmap image_copy;
+    private AlertDialog.Builder alert;
+
     private boolean rangeBtnRunning = false;
+    private boolean selectRange = false;
     private boolean isBinary = false;
     private boolean addBtnRunning = false;
+    private boolean deleteBtnRunning = false;
 
     private  boolean imageExist = false;
     private int size;
     private int sum_thres_colony;
     private int sum_thres_bin;
-    private Intent intent;
-    private Bitmap image_bitmap;
-    private AlertDialog.Builder alert;
+    private int ColonyCount = 0;
+    final int REQ_CODE_SELECT_IMAGE=100;
+
     private double realX = 0;
     private double realY = 0;
-    final int REQ_CODE_SELECT_IMAGE=100;
+
+
+
 
 private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
     @Override
@@ -129,7 +137,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 }
                 return true;
             case R.id.item_binary:
-                if (imageExist && !rangeBtnRunning && !addBtnRunning) {
+                if (imageExist && !rangeBtnRunning && !addBtnRunning && !deleteBtnRunning) {
                     initThreshold();
                     makeBinary(0);
                     isBinary = true;
@@ -139,7 +147,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 }
                 return true;
             case R.id.item_camera:
-                if(!rangeBtnRunning && !addBtnRunning){
+                if(!rangeBtnRunning && !addBtnRunning && !deleteBtnRunning){
                     Intent intentCamera = new Intent(MainActivity.this, CLCameraActivity.class);
                     intentCamera.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intentCamera);
@@ -149,7 +157,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 }
                 return true;
             case R.id.item_album:
-                if (!rangeBtnRunning && !addBtnRunning) {
+                if (!rangeBtnRunning && !addBtnRunning && !deleteBtnRunning) {
                     intent = new Intent(Intent.ACTION_PICK);
                     intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
                     intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -159,7 +167,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 }
                 return true;
             case R.id.item_setting:
-                if(!rangeBtnRunning && !addBtnRunning){
+                if(!rangeBtnRunning && !addBtnRunning && !deleteBtnRunning){
                     Intent intentSetting = new Intent(MainActivity.this, CLSettingActivity.class);
                     startActivity(intentSetting);
                 }
@@ -218,19 +226,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         iv_colony = (ImageView) findViewById(R.id.iv_colony);
         tv_count = (TextView)findViewById(R.id.tv_count);
         tv_thres = (TextView)findViewById(R.id.tv_thres);
-
-
         tv_thres.setText(String.format("Threshold = " + sum_thres_colony));
-//
-//        //경고메세지 세팅
-//        alert = new AlertDialog.Builder(MainActivity.this);
-//        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();     //닫기
-//            }
-//        });
-//        alert.setMessage("먼저 사진을 찍거나, 앨범에서 사진을 선택해 주세요.");
 
        mAttacher = new PhotoViewAttacher(iv_colony);
     }
@@ -239,7 +235,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         sum_thres_colony = 0;
         sum_thres_bin = 0;
     }
-    ImageView.OnTouchListener touch = new ImageView.OnTouchListener(){
+    ImageView.OnTouchListener drawRangeListener = new ImageView.OnTouchListener(){
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -254,7 +250,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         }
     };
 
-    ImageView.OnTouchListener touchedCoordinate = new ImageView.OnTouchListener(){
+    ImageView.OnTouchListener addCoordinateListener = new ImageView.OnTouchListener(){
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -268,6 +264,22 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
             return false;
         }
     };
+
+    ImageView.OnTouchListener deleteCoordinateListener = new ImageView.OnTouchListener(){
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch(event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                {
+                    deleteTouchedCoordinate(event);
+                    break;
+                }
+            }
+            return false;
+        }
+    };
+
     private Runnable mMyTask = new MyRunnable();
 
     private void DrawWhenTouched(MotionEvent event){
@@ -280,6 +292,9 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
             drawCircle();
         else
             drawRect();
+
+        selectRange = true;
+        selectRange = true;
     }
 
     private void AddTouchedCoordinate(MotionEvent event){
@@ -289,10 +304,35 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         realY = (int) event.getY();
 
         Mat mat_colony = new Mat();
-        Utils.bitmapToMat(image_bitmap, mat_colony);
+        Utils.bitmapToMat(image_copy, mat_colony);
         AddCoordinates(mat_colony.getNativeObjAddr(), (int)realX, (int)realY);
-        Utils.matToBitmap(mat_colony, image_bitmap);
-        iv_colony.setImageBitmap(image_bitmap);
+        Utils.matToBitmap(mat_colony, image_copy);
+        iv_colony.setImageBitmap(image_copy);
+        ColonyCount++;
+        String str_colony = String.valueOf(ColonyCount);
+        tv_count.setText("Total Colony = " + str_colony);
+    }
+
+    private void deleteTouchedCoordinate(MotionEvent event){
+        int[] viewCoords = new int[2];
+        iv_colony.getLocationOnScreen(viewCoords);
+
+        realX = (int) event.getX();
+        realY = (int) event.getY();
+
+        Mat mat_colony = new Mat();
+        Utils.bitmapToMat(image_bitmap, mat_colony);
+
+        int result = DeleteCoordinates(mat_colony.getNativeObjAddr(), (int)realX, (int)realY);
+
+        Utils.matToBitmap(mat_colony, image_copy);
+        iv_colony.setImageBitmap(image_copy);
+
+        if(result != -1 && ColonyCount > 0){
+            ColonyCount--;
+            String str_colony = String.valueOf(ColonyCount);
+            tv_count.setText("Total Colony = " + str_colony);
+        }
     }
 
 
@@ -316,23 +356,23 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
     }
 
     private void FindColony(int addThreshold) {
+        if(selectRange){
+            Bitmap bmp_colony = image_bitmap.copy(image_bitmap.getConfig(), true);
+            Mat mat_colony = new Mat();
+            Mat mat_gray = new Mat();
+            Mat mat_dish = new Mat();
 
-        Bitmap bmp_colony = image_bitmap.copy(image_bitmap.getConfig(), true);
-        Mat mat_colony = new Mat();
-        Mat mat_gray = new Mat();
-        Mat mat_dish = new Mat();
-
-        Setting(mat_colony, mat_gray, mat_dish, bmp_colony);
-        if(GlobalInfo.isCircle)
-            makeCircle(mat_dish, -5);
-        else
-            makeRect(mat_dish, -5);
+            Setting(mat_colony, mat_gray, mat_dish, bmp_colony);
+            if(GlobalInfo.isCircle)
+                makeCircle(mat_dish, -5);
+            else
+                makeRect(mat_dish, -5);
 
 
-        int count = FindColony(mat_colony.getNativeObjAddr(), mat_gray.getNativeObjAddr(), mat_dish.getNativeObjAddr(), addThreshold);
+            ColonyCount = FindColony(mat_colony.getNativeObjAddr(), mat_gray.getNativeObjAddr(), mat_dish.getNativeObjAddr(), addThreshold);
 
-        image_bitmap = bmp_colony;
-        DrawView(mat_colony, count);
+            DrawView(mat_colony);
+        }
     }
 
     private void Setting(Mat mat_colony, Mat mat_gray, Mat mat_dish, Bitmap bmp_colony){
@@ -353,11 +393,13 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         Imgproc.rectangle(mat_sample, new Point(realX - (size / 2), realY - (size / 2)), new Point(realX + (size / 2), realY + (size / 2)), new Scalar(255, 255, 255), shift);
     }
 
-    private void DrawView(Mat mat_colony, int count) {
-        Utils.matToBitmap(mat_colony, image_bitmap);
-        iv_colony.setImageBitmap(image_bitmap);
-        String str_colony = String.valueOf(count);
+    private void DrawView(Mat mat_colony) {
+        Bitmap bmp_colony = image_bitmap.copy(image_bitmap.getConfig(), true);
+        Utils.matToBitmap(mat_colony, bmp_colony);
+        iv_colony.setImageBitmap(bmp_colony);
+        String str_colony = String.valueOf(ColonyCount);
         tv_count.setText("Total Colony = " + str_colony);
+        image_copy = bmp_colony.copy(bmp_colony.getConfig(), true);
     }
 
     private void noPictrueToast() {
@@ -380,6 +422,13 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
+    private void invalidWorkToast() {
+        Toast toast = Toast.makeText(getApplicationContext(),
+                "먼저 범위지정버튼을 실행해 주십시오.", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -392,6 +441,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         if(GlobalInfo.CLCameraBitmap != null)
         {
             image_bitmap = GlobalInfo.CLCameraBitmap;
+            image_copy = image_bitmap.copy(image_bitmap.getConfig(), true);
             SystemClock.sleep(100);
             resizeImage();
             SystemClock.sleep(100);
@@ -439,6 +489,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                    image_copy = image_bitmap.copy(image_bitmap.getConfig(), true);
                     SystemClock.sleep(100);
                     resizeImage();
                     SystemClock.sleep(100);
@@ -460,6 +511,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
     public native int FindColony(long mat_origin, long mat_gray, long mat_dish, int addThreshold);
     public native void AddCoordinates(long mat_origin, int x, int y);
     public native void MakeBinaryImage(long mat_gray, int addThreshold);
+    public native  int DeleteCoordinates(long mat_origin, int x, int y);
 
     private class MyRunnable implements Runnable{
 
@@ -473,13 +525,13 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 public void onClick(View v) {
                     if(imageExist)//버튼이 사용가능한 상태면
                     {
-                        if(addBtnRunning){
+                        if(addBtnRunning || deleteBtnRunning){
                             invalidClickToast();
                         }
                         else if(!rangeBtnRunning)//범위버튼이 작동하고 있는지 아닌지
                         {
                             mAttacher.cleanup();
-                            iv_colony.setOnTouchListener(touch);
+                            iv_colony.setOnTouchListener(drawRangeListener);
                             rangeBtnRunning = true;
                             isBinary = false;
 
@@ -513,14 +565,17 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 public void onClick(View v) {
                     if(imageExist)//버튼이 사용가능한 상태면
                     {
-                        if(rangeBtnRunning)//범위버튼이 작동하고 있는지 아닌지
+                        if(rangeBtnRunning || deleteBtnRunning)//범위버튼이 작동하고 있는지 아닌지
                         {
                             invalidClickToast();
+                        }
+                        else if(!selectRange){
+                            invalidWorkToast();
                         }
                         else if(btn_add.getText().equals("추가"))
                         {
                             mAttacher.cleanup();
-                            iv_colony.setOnTouchListener(touchedCoordinate);
+                            iv_colony.setOnTouchListener(addCoordinateListener);
                             btn_add.setText("완료");
                             addBtnRunning = true;
                         }
@@ -539,6 +594,41 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 }
             });
 
+
+            final Button btn_delete = (Button)findViewById(R.id.btn_delete);
+            btn_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(imageExist)//버튼이 사용가능한 상태면
+                    {
+                        if(rangeBtnRunning || addBtnRunning)//범위버튼이 작동하고 있는지 아닌지
+                        {
+                            invalidClickToast();
+                        }
+                        else if(!selectRange){
+                            invalidWorkToast();
+                        }
+                        else if(btn_delete.getText().equals("삭제"))
+                        {
+                            mAttacher.cleanup();
+                            iv_colony.setOnTouchListener(deleteCoordinateListener);
+                            btn_delete.setText("완료");
+                            deleteBtnRunning = true;
+                        }
+                        else if(btn_delete.getText().equals("완료"))
+                        {
+                            iv_colony.setOnTouchListener(null);
+                            mAttacher = new PhotoViewAttacher(iv_colony);
+                            btn_delete.setText("삭제");
+                            deleteBtnRunning = false;
+                        }
+                    }
+                    else
+                    {
+                        noPictrueToast();
+                    }
+                }
+            });
 
             Button btn_plus = (Button)findViewById(R.id.btn_plus);
             btn_plus.setOnClickListener(new View.OnClickListener() {

@@ -8,11 +8,12 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
 #include <vector>
-#include "ColonyTool.h"
 #include "ColonyCell.h"
 #include "cimUtils.h"
 #include "Blob.h"
-#include<android/log.h>
+#include <android/log.h>
+#include <math.h>
+
 #define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, "libnav", __VA_ARGS__)
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG  , "libnav", __VA_ARGS__)
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO   , "libnav", __VA_ARGS__)
@@ -149,6 +150,24 @@ private:
         m_cell[m_nCells++].Set(realX, realY, 7.f);
         return m_nCells;
     }
+
+    static CvPoint FindCell(int realX, int realY){
+        int minDistance = 0;
+        CvPoint coordinate = NULL;
+        minDistance = sqrt( pow(m_cell[0].Center().x - realX, 2) + pow(m_cell[0].Center().y - realY, 2) );;
+        coordinate = m_cell[0].Center();
+
+        for(int i = 1; i < m_nCells; i++){
+            int val = sqrt( pow(m_cell[i].Center().x - realX, 2) + pow(m_cell[i].Center().y - realY, 2) );
+            if(minDistance  > val){
+                minDistance = val;
+                coordinate = m_cell[i].Center();
+            }
+        }
+
+        return coordinate;
+    }
+
 public:
 
     static int CalculateColony(jlong addrRgb, jlong addrGray, jlong addrDish, jint addThreshold)
@@ -179,15 +198,46 @@ public:
         return nCells;
     }
 
-    static void AddCoordinates(jlong addrRgb, jint realX, jint realY){
+    static void AddCoordinates(jlong addrRgb, int realX, int realY){
         Mat& mat_colony  = *(Mat*)addrRgb;
         IplImage *_colony = new IplImage(mat_colony);
         int nCells = AddCell(realX, realY);
+
         for(int i = 0; i < nCells; i++)
         {
             m_cell[i].Draw( _colony );
         }
     }
+
+
+    static int DeleteCoordinates(jlong addrRgb, int realX, int realY){
+        Mat& mat_colony  = *(Mat*)addrRgb;
+        IplImage *_colony = new IplImage(mat_colony);
+        CvPoint find = FindCell(realX, realY);
+        int checkCount = m_nCells;
+
+        for(int i = 0; i < m_nCells; i++)
+        {
+            if(find.x == m_cell[i].Center().x && find.y == m_cell[i].Center().y){
+                for(int j = i; j < m_nCells - 1; j++){
+                    m_cell[j] = m_cell[j+1];
+                }
+                m_nCells--;
+                break;
+            }
+
+        }
+
+        for(int i = 0; i < m_nCells; i++)
+        {
+             m_cell[i].Draw( _colony );
+        }
+
+        if(checkCount != m_nCells) return 1;
+        else return -1;
+
+    }
+
     static void MakeBinaryImage(jlong addrGray, jint addThreshold){
         Mat& mat_gray  = *(Mat*)addrGray;
         IplImage *_gray = new IplImage(mat_gray);
