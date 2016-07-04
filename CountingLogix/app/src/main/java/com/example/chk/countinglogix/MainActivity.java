@@ -520,6 +520,10 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         public void run() {
 
             final Button btn_range = (Button)findViewById(R.id.btn_range);
+            final Button btn_add = (Button)findViewById(R.id.btn_add);
+            final Button btn_delete = (Button)findViewById(R.id.btn_delete);
+
+
             btn_range.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -548,9 +552,6 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                             tv_thres.setText("Threshold = " + str_thres);
                             btn_range.setText("범위지정");
                         }
-
-
-
                     }
                     else
                     {
@@ -559,7 +560,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 }
             });
 
-            final Button btn_add = (Button)findViewById(R.id.btn_add);
+
             btn_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -577,6 +578,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                             mAttacher.cleanup();
                             iv_colony.setOnTouchListener(addCoordinateListener);
                             btn_add.setText("완료");
+                            btn_delete.setVisibility(View.INVISIBLE);
                             addBtnRunning = true;
                         }
                         else if(btn_add.getText().equals("완료"))
@@ -584,6 +586,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                             iv_colony.setOnTouchListener(null);
                             mAttacher = new PhotoViewAttacher(iv_colony);
                             btn_add.setText("추가");
+                            btn_delete.setVisibility(View.VISIBLE);
                             addBtnRunning = false;
                         }
                     }
@@ -595,7 +598,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
             });
 
 
-            final Button btn_delete = (Button)findViewById(R.id.btn_delete);
+
             btn_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -613,6 +616,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                             mAttacher.cleanup();
                             iv_colony.setOnTouchListener(deleteCoordinateListener);
                             btn_delete.setText("완료");
+                            btn_add.setVisibility(View.INVISIBLE);
                             deleteBtnRunning = true;
                         }
                         else if(btn_delete.getText().equals("완료"))
@@ -620,6 +624,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                             iv_colony.setOnTouchListener(null);
                             mAttacher = new PhotoViewAttacher(iv_colony);
                             btn_delete.setText("삭제");
+                            btn_add.setVisibility(View.VISIBLE);
                             deleteBtnRunning = false;
                         }
                     }
