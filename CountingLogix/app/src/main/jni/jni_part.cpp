@@ -14,7 +14,7 @@ using namespace cv;
 extern "C" {
 
 JNIEXPORT jint JNICALL Java_com_example_chk_countinglogix_MainActivity_FindColony
-        (JNIEnv *, jobject, jlong, jlong, jlong, jint);
+        (JNIEnv *, jobject, jlong, jlong, jlong, jint, jboolean);
 
 JNIEXPORT void JNICALL Java_com_example_chk_countinglogix_MainActivity_MakeBinaryImage(JNIEnv *, jobject, jlong, jint);
 
@@ -22,9 +22,9 @@ JNIEXPORT void JNICALL Java_com_example_chk_countinglogix_MainActivity_AddCoordi
 
 JNIEXPORT jint JNICALL Java_com_example_chk_countinglogix_MainActivity_DeleteCoordinates(JNIEnv *, jobject, jlong addrOrigin,  jint realX, jint realY);
 
-JNIEXPORT jint JNICALL Java_com_example_chk_countinglogix_MainActivity_FindColony(JNIEnv* env, jobject, jlong addrRgb, jlong addrGray, jlong addrDish, jint addThreshold)
+JNIEXPORT jint JNICALL Java_com_example_chk_countinglogix_MainActivity_FindColony(JNIEnv* env, jobject, jlong addrRgb, jlong addrGray, jlong addrDish, jint addThreshold, jboolean isReverse)
 {
-    int count = ColonyCalculator::CalculateColony(addrRgb, addrGray, addrDish, addThreshold);
+    int count = ColonyCalculator::CalculateColony(addrRgb, addrGray, addrDish, addThreshold, isReverse);
     return  count;
 }
 

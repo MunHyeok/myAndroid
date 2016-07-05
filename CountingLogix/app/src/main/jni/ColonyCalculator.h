@@ -100,7 +100,7 @@ private:
     static CColonyCell* m_cell;
     static int thres;
     static int m_nCells;
-    static void setImage(IplImage* _gray, IplImage* _bin, IplImage* _dst, IplImage* _dish, int addThreshold)
+    static void setImage(IplImage* _gray, IplImage* _bin, IplImage* _dst, IplImage* _dish, int addThreshold, bool isReverse)
     {
         if(addThreshold== 0)
         {
@@ -111,6 +111,26 @@ private:
             thres += addThreshold;
             cvThreshold( _bin, _bin, thres, 255, CV_THRESH_BINARY);
         }
+
+        if(!isReverse){
+        	int highValue = 0;
+              	int lowValue = 0;
+              	for (int y = 0; y<cvHeight(_bin); y++) {
+              		unsigned char *c = cvGetPixelPtr(_bin, 0, y);
+              		for (int x = 0; x<cvWidth(_bin); x++) {
+              			if (c[x] == 255)
+              				highValue++;
+              			else
+              				lowValue++;
+              		}
+              	}
+
+              	if (highValue >  lowValue){
+              		cvNot(_bin, _bin);
+              	}
+        }
+
+
 
         cvMorphologyEx( _bin, _bin, 0, 0, CV_MOP_OPEN, 3 );
 
@@ -125,8 +145,15 @@ private:
         cvDistTransform	 ( _bin, _dst);
         cvNormalize		 ( _dst, _dst, 0, 1., cv::NORM_MINMAX);
 
-        cvSmooth(_dst, _dst, CV_GAUSSIAN, radius * 2 - 1);
-        cvLocalMax32f	 ( _dst, _gray,(int)radius/4, 0.1f);
+        if(radius < 4){
+            cvLocalMax32f	 ( _dst, _gray, 2 , 0.1f);
+            cvTrimLocalMax32f( _dst, _gray, 11 );
+        }
+        else{
+            cvSmooth(_dst, _dst, CV_GAUSSIAN, radius * 2 - 1);
+            cvLocalMax32f	 ( _dst, _gray,(int)radius/4, 0.1f);
+        }
+
         //cvTrimLocalMax32f( _dst, _gray, 11 );
 
     }
@@ -137,40 +164,53 @@ private:
         for( int y=0 ; y<cvHeight(max) ; y++ ) {
             unsigned char *c = cvGetPixelPtr(max, 0, y );
             for( int x=0 ; x<cvWidth(max) ; x++ ) {
-                if( c[x] == 255 )
-                    m_cell[m_nCells++].Set( x, y, 7.f );
-                else if ( c[x] > 10 )
-                    m_cell[m_nCells++].Set( x, y, 3.f, false );
+            	if (m_nCells <= 9999){
+            	    if( c[x] == 255 )
+                        m_cell[m_nCells++].Set( x, y, 7.f );
+                    else if ( c[x] > 10 )
+                        m_cell[m_nCells++].Set( x, y, 3.f, false );
+            	}
+            	else break;
             }
         }
         return m_nCells;
     }
 
     static int AddCell(int realX, int realY){
-        m_cell[m_nCells++].Set(realX, realY, 7.f);
+        if(m_nCells <= 9999) m_cell[m_nCells++].Set(realX, realY, 7.f);
         return m_nCells;
     }
 
-    static CvPoint FindCell(int realX, int realY){
-        int minDistance = 0;
+    static CvPoint FindCell(int realX, int realY, double checkedDistance){
+        double minDistance = 0;
         CvPoint coordinate = NULL;
-        minDistance = sqrt( pow(m_cell[0].Center().x - realX, 2) + pow(m_cell[0].Center().y - realY, 2) );;
         coordinate = m_cell[0].Center();
 
         for(int i = 1; i < m_nCells; i++){
-            int val = sqrt( pow(m_cell[i].Center().x - realX, 2) + pow(m_cell[i].Center().y - realY, 2) );
-            if(minDistance  > val){
-                minDistance = val;
+            double val = sqrt( pow(m_cell[i].Center().x - realX, 2) + pow(m_cell[i].Center().y - realY, 2) );
+            if(checkedDistance == val){
                 coordinate = m_cell[i].Center();
+                break;
             }
         }
 
         return coordinate;
     }
+    static double CheckDistance(int realX, int realY){
+        double minDistance = 0;
+        minDistance = sqrt( pow(m_cell[0].Center().x - realX, 2) + pow(m_cell[0].Center().y - realY, 2) );
+        for(int i = 1; i < m_nCells; i++){
+            double val = sqrt( pow(m_cell[i].Center().x - realX, 2) + pow(m_cell[i].Center().y - realY, 2) );
+            if(minDistance  > val){
+                minDistance = val;
+            }
+        }
+        return minDistance;
+    }
 
 public:
 
-    static int CalculateColony(jlong addrRgb, jlong addrGray, jlong addrDish, jint addThreshold)
+    static int CalculateColony(jlong addrRgb, jlong addrGray, jlong addrDish, jint addThreshold, jboolean isReverse)
     {
         Mat& mat_colony  = *(Mat*)addrRgb;
         Mat& mat_gray  = *(Mat*)addrGray;
@@ -184,7 +224,7 @@ public:
         IplImage *_bin = new IplImage(mat_bin);
         IplImage *_dish = new IplImage(mat_dish);
 
-        setImage(_gray, _bin, _dst, _dish, addThreshold);
+        setImage(_gray, _bin, _dst, _dish, addThreshold, isReverse);
 
         int nCells = RegisterCells( _gray );
 
@@ -213,7 +253,14 @@ public:
     static int DeleteCoordinates(jlong addrRgb, int realX, int realY){
         Mat& mat_colony  = *(Mat*)addrRgb;
         IplImage *_colony = new IplImage(mat_colony);
-        CvPoint find = FindCell(realX, realY);
+        double check = CheckDistance(realX, realY);
+       // LOGI("Distance : %f", check);
+       // LOGI("width : %d", cvWidth(_colony));
+       // LOGI("height : %d", cvHeight(_colony));
+        CvPoint find;
+        if(check <= (cvWidth(_colony) / 10) && check <= (cvHeight(_colony) / 10) )
+             find = FindCell(realX, realY, check);
+
         int checkCount = m_nCells;
 
         for(int i = 0; i < m_nCells; i++)

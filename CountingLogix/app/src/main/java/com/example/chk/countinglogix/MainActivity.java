@@ -55,8 +55,9 @@ public class MainActivity extends CLActivity
     private boolean isBinary = false;
     private boolean addBtnRunning = false;
     private boolean deleteBtnRunning = false;
-
     private  boolean imageExist = false;
+    private boolean isReverse = false;
+
     private int size;
     private int sum_thres_colony;
     private int sum_thres_bin;
@@ -131,6 +132,8 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                     Bitmap bmp_colony = image_bitmap.copy(image_bitmap.getConfig(), true);
                     image_bitmap = createInvertedBitmap(bmp_colony);
                     iv_colony.setImageBitmap(image_bitmap);
+                    if(isReverse) isReverse = false;
+                    else isReverse = true;
                 }
                 else{
                     noPictrueToast();
@@ -369,7 +372,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 makeRect(mat_dish, -5);
 
 
-            ColonyCount = FindColony(mat_colony.getNativeObjAddr(), mat_gray.getNativeObjAddr(), mat_dish.getNativeObjAddr(), addThreshold);
+            ColonyCount = FindColony(mat_colony.getNativeObjAddr(), mat_gray.getNativeObjAddr(), mat_dish.getNativeObjAddr(), addThreshold, isReverse);
 
             DrawView(mat_colony);
         }
@@ -508,7 +511,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         }
     }
 
-    public native int FindColony(long mat_origin, long mat_gray, long mat_dish, int addThreshold);
+    public native int FindColony(long mat_origin, long mat_gray, long mat_dish, int addThreshold, boolean isReverse);
     public native void AddCoordinates(long mat_origin, int x, int y);
     public native void MakeBinaryImage(long mat_gray, int addThreshold);
     public native  int DeleteCoordinates(long mat_origin, int x, int y);
