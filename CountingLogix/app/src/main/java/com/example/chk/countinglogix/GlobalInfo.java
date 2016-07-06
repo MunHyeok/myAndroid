@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 public class GlobalInfo {
     public static Bitmap CLCameraBitmap = null;
     public static int thresChange = 5;
+    public static int radius = 200;
     public static boolean isCircle = true;
     public static double  diagonalInches;
 }

@@ -8,11 +8,13 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
 #include <vector>
+#include <android/log.h>
+#include <math.h>
+
 #include "ColonyCell.h"
 #include "cimUtils.h"
 #include "Blob.h"
-#include <android/log.h>
-#include <math.h>
+#include "RollingBall.h"
 
 #define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, "libnav", __VA_ARGS__)
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG  , "libnav", __VA_ARGS__)
@@ -100,8 +102,27 @@ private:
     static CColonyCell* m_cell;
     static int thres;
     static int m_nCells;
-    static void setImage(IplImage* _gray, IplImage* _bin, IplImage* _dst, IplImage* _dish, int addThreshold, bool isReverse)
-    {
+
+    static bool checkObject(IplImage* _sample){
+        int highValue = 0;
+        int lowValue = 0;
+        for (int y = 0; y<cvHeight(_sample); y++) {
+            unsigned char *c = cvGetPixelPtr(_sample, 0, y);
+            for (int x = 0; x<cvWidth(_sample); x++) {
+                if (c[x] == 255)
+                    highValue++;
+                else
+                    lowValue++;
+            }
+        }
+
+        if(highValue > lowValue) return true;
+        else return false;
+
+    }
+    static void setImage(IplImage* _gray, IplImage* _check,IplImage* _bin,
+    IplImage* _dst, IplImage* _dish, int addThreshold, bool isReverse, bool checked){
+
         if(addThreshold== 0)
         {
             thres = cvRound(cvThreshold( _bin, _bin, 0, 255, CV_THRESH_OTSU));
@@ -113,21 +134,9 @@ private:
         }
 
         if(!isReverse){
-        	int highValue = 0;
-              	int lowValue = 0;
-              	for (int y = 0; y<cvHeight(_bin); y++) {
-              		unsigned char *c = cvGetPixelPtr(_bin, 0, y);
-              		for (int x = 0; x<cvWidth(_bin); x++) {
-              			if (c[x] == 255)
-              				highValue++;
-              			else
-              				lowValue++;
-              		}
-              	}
-
-              	if (highValue >  lowValue){
-              		cvNot(_bin, _bin);
-              	}
+            if (checked){
+                cvNot(_bin, _bin);
+            }
         }
 
 
@@ -210,21 +219,36 @@ private:
 
 public:
 
-    static int CalculateColony(jlong addrRgb, jlong addrGray, jlong addrDish, jint addThreshold, jboolean isReverse)
+    static int CalculateColony(jlong addrRgb, jlong addrGray, jlong addrDish, jint addThreshold, jboolean isReverse, jint radius)
     {
         Mat& mat_colony  = *(Mat*)addrRgb;
         Mat& mat_gray  = *(Mat*)addrGray;
         Mat& mat_dish  = *(Mat*)addrDish;
-        Mat mat_bin = mat_gray.clone();
-        Mat mat_lmax = mat_gray.clone();
+        Mat mat_check = mat_gray.clone();
 
         IplImage *_dst = NULL;
         IplImage *_colony = new IplImage(mat_colony);
         IplImage *_gray = new IplImage(mat_gray);
-        IplImage *_bin = new IplImage(mat_bin);
+        IplImage *_check = new IplImage(mat_check);
         IplImage *_dish = new IplImage(mat_dish);
 
-        setImage(_gray, _bin, _dst, _dish, addThreshold, isReverse);
+        cvThreshold( _check, _check, 0, 255, CV_THRESH_OTSU);
+        bool checked = checkObject( _check );
+        if(checked){
+            RollingBall::subtractBackground(_gray, _gray, radius);
+        }
+        else{
+            cvNot(_gray, _gray);
+            RollingBall::subtractBackground(_gray, _gray, radius);
+            cvNot(_gray, _gray);
+        }
+
+        Mat mat_bin = mat_gray.clone();
+        IplImage *_bin = new IplImage(mat_bin);
+
+
+
+        setImage(_gray, _check, _bin, _dst, _dish, addThreshold, isReverse, checked);
 
         int nCells = RegisterCells( _gray );
 

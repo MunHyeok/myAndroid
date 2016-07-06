@@ -1,6 +1,6 @@
-C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/obj/local/armeabi-v7a/objs-debug/CountingLogix/jni_part.o: \
- C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/jni_part.cpp \
- C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/ColonyCalculator.h \
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/obj/local/arm64-v8a/objs-debug/CountingLogix/RollingBall.o: \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/RollingBall.cpp \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/RollingBall.h \
  ../../sdk/native/jni/include/opencv2/core/core.hpp \
  ../../sdk/native/jni/include/opencv2/core.hpp \
  ../../sdk/native/jni/include/opencv2/core/cvdef.h \
@@ -35,37 +35,17 @@ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/obj/local/arm
  ../../sdk/native/jni/include/opencv2/core/core_c.h \
  ../../sdk/native/jni/include/opencv2/core/types_c.h \
  ../../sdk/native/jni/include/opencv2/core/optim.hpp \
- ../../sdk/native/jni/include/opencv2/imgproc/imgproc.hpp \
- ../../sdk/native/jni/include/opencv2/imgproc.hpp \
- ../../sdk/native/jni/include/opencv2/imgproc/imgproc_c.h \
- ../../sdk/native/jni/include/opencv2/imgproc/types_c.h \
- ../../sdk/native/jni/include/opencv2/features2d/features2d.hpp \
- ../../sdk/native/jni/include/opencv2/features2d.hpp \
- ../../sdk/native/jni/include/opencv2/flann/miniflann.hpp \
- ../../sdk/native/jni/include/opencv2/flann/defines.h \
- ../../sdk/native/jni/include/opencv2/flann/config.h \
- C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/ColonyCell.h \
- C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Img.h \
- ../../sdk/native/jni/include/opencv/cv.h \
- ../../sdk/native/jni/include/opencv2/photo/photo_c.h \
- ../../sdk/native/jni/include/opencv2/video/tracking_c.h \
- ../../sdk/native/jni/include/opencv2/objdetect/objdetect_c.h \
- C:/Users/CHK/AppData/Local/Android/sdk/ndk-bundle/build//../sources/cxx-stl/gnu-libstdc++/4.9/include/deque \
- ../../sdk/native/jni/include/opencv/cxcore.h \
- ../../sdk/native/jni/include/opencv/highgui.h \
- ../../sdk/native/jni/include/opencv2/highgui/highgui_c.h \
- ../../sdk/native/jni/include/opencv2/imgcodecs/imgcodecs_c.h \
- ../../sdk/native/jni/include/opencv2/videoio/videoio_c.h \
- C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/cimUtils.h \
- C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Blob.h \
- C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/BlobArea.h \
- C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/RollingBall.h \
  ../../sdk/native/jni/include/opencv2/highgui/highgui.hpp \
  ../../sdk/native/jni/include/opencv2/highgui.hpp \
  ../../sdk/native/jni/include/opencv2/imgcodecs.hpp \
- ../../sdk/native/jni/include/opencv2/videoio.hpp
+ ../../sdk/native/jni/include/opencv2/videoio.hpp \
+ ../../sdk/native/jni/include/opencv2/highgui/highgui_c.h \
+ ../../sdk/native/jni/include/opencv2/imgproc/imgproc_c.h \
+ ../../sdk/native/jni/include/opencv2/imgproc/types_c.h \
+ ../../sdk/native/jni/include/opencv2/imgcodecs/imgcodecs_c.h \
+ ../../sdk/native/jni/include/opencv2/videoio/videoio_c.h
 
-C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/ColonyCalculator.h:
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/RollingBall.h:
 
 ../../sdk/native/jni/include/opencv2/core/core.hpp:
 
@@ -135,56 +115,6 @@ C:/Users/CHK/AppData/Local/Android/sdk/ndk-bundle/build//../sources/cxx-stl/gnu-
 
 ../../sdk/native/jni/include/opencv2/core/optim.hpp:
 
-../../sdk/native/jni/include/opencv2/imgproc/imgproc.hpp:
-
-../../sdk/native/jni/include/opencv2/imgproc.hpp:
-
-../../sdk/native/jni/include/opencv2/imgproc/imgproc_c.h:
-
-../../sdk/native/jni/include/opencv2/imgproc/types_c.h:
-
-../../sdk/native/jni/include/opencv2/features2d/features2d.hpp:
-
-../../sdk/native/jni/include/opencv2/features2d.hpp:
-
-../../sdk/native/jni/include/opencv2/flann/miniflann.hpp:
-
-../../sdk/native/jni/include/opencv2/flann/defines.h:
-
-../../sdk/native/jni/include/opencv2/flann/config.h:
-
-C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/ColonyCell.h:
-
-C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Img.h:
-
-../../sdk/native/jni/include/opencv/cv.h:
-
-../../sdk/native/jni/include/opencv2/photo/photo_c.h:
-
-../../sdk/native/jni/include/opencv2/video/tracking_c.h:
-
-../../sdk/native/jni/include/opencv2/objdetect/objdetect_c.h:
-
-C:/Users/CHK/AppData/Local/Android/sdk/ndk-bundle/build//../sources/cxx-stl/gnu-libstdc++/4.9/include/deque:
-
-../../sdk/native/jni/include/opencv/cxcore.h:
-
-../../sdk/native/jni/include/opencv/highgui.h:
-
-../../sdk/native/jni/include/opencv2/highgui/highgui_c.h:
-
-../../sdk/native/jni/include/opencv2/imgcodecs/imgcodecs_c.h:
-
-../../sdk/native/jni/include/opencv2/videoio/videoio_c.h:
-
-C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/cimUtils.h:
-
-C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Blob.h:
-
-C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/BlobArea.h:
-
-C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/RollingBall.h:
-
 ../../sdk/native/jni/include/opencv2/highgui/highgui.hpp:
 
 ../../sdk/native/jni/include/opencv2/highgui.hpp:
@@ -192,3 +122,13 @@ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/RollingBa
 ../../sdk/native/jni/include/opencv2/imgcodecs.hpp:
 
 ../../sdk/native/jni/include/opencv2/videoio.hpp:
+
+../../sdk/native/jni/include/opencv2/highgui/highgui_c.h:
+
+../../sdk/native/jni/include/opencv2/imgproc/imgproc_c.h:
+
+../../sdk/native/jni/include/opencv2/imgproc/types_c.h:
+
+../../sdk/native/jni/include/opencv2/imgcodecs/imgcodecs_c.h:
+
+../../sdk/native/jni/include/opencv2/videoio/videoio_c.h:

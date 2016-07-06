@@ -4,6 +4,8 @@
         android:title="영상반전"/>
     <item android:id="@+id/item_binary"
         android:title="이진화" />
+    <item android:id="@+id/item_rolling"
+        android:title="롤링볼" />
     <item android:id="@+id/item_camera"
         android:title="카메라" />
     <item android:id="@+id/item_album"

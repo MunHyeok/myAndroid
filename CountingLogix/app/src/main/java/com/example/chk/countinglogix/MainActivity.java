@@ -128,7 +128,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.item_reverse:
-                if (imageExist) {
+                if (imageExist && !rangeBtnRunning && !addBtnRunning && !deleteBtnRunning) {
                     Bitmap bmp_colony = image_bitmap.copy(image_bitmap.getConfig(), true);
                     image_bitmap = createInvertedBitmap(bmp_colony);
                     iv_colony.setImageBitmap(image_bitmap);
@@ -136,7 +136,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                     else isReverse = true;
                 }
                 else{
-                    noPictrueToast();
+                    invalidActionToast();
                 }
                 return true;
             case R.id.item_binary:
@@ -146,7 +146,24 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                     isBinary = true;
                 }
                 else{
-                    invalidClickToast();
+                    invalidActionToast();
+                }
+                return true;
+            case R.id.item_rolling:
+                if (imageExist && !rangeBtnRunning && !addBtnRunning && !deleteBtnRunning) {
+                    Bitmap bmp_colony = image_bitmap.copy(image_bitmap.getConfig(), true);
+                    Mat mat_gray = new Mat();
+                    Utils.bitmapToMat(bmp_colony, mat_gray);
+                    Imgproc.cvtColor(mat_gray, mat_gray, Imgproc.COLOR_BGR2GRAY);
+                    RollingBall(mat_gray.getNativeObjAddr(), GlobalInfo.radius);
+
+                    Utils.matToBitmap(mat_gray, bmp_colony);
+                    iv_colony.setImageBitmap(bmp_colony);
+
+
+                }
+                else{
+                    invalidActionToast();
                 }
                 return true;
             case R.id.item_camera:
@@ -372,7 +389,8 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
                 makeRect(mat_dish, -5);
 
 
-            ColonyCount = FindColony(mat_colony.getNativeObjAddr(), mat_gray.getNativeObjAddr(), mat_dish.getNativeObjAddr(), addThreshold, isReverse);
+            ColonyCount = FindColony(mat_colony.getNativeObjAddr(), mat_gray.getNativeObjAddr(), mat_dish.getNativeObjAddr(),
+                    addThreshold, isReverse, GlobalInfo.radius);
 
             DrawView(mat_colony);
         }
@@ -422,6 +440,13 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
     private void invalidClickToast() {
         Toast toast = Toast.makeText(getApplicationContext(),
                 "실행중인 동작을 완료하고 설정을 변경해 주세요", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
+    private void invalidActionToast(){
+        Toast toast = Toast.makeText(getApplicationContext(),
+                "영상이 없거나 다른 동작이 실행중입니다 .", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
@@ -511,10 +536,11 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         }
     }
 
-    public native int FindColony(long mat_origin, long mat_gray, long mat_dish, int addThreshold, boolean isReverse);
+    public native int FindColony(long mat_origin, long mat_gray, long mat_dish, int addThreshold, boolean isReverse, int radius);
     public native void AddCoordinates(long mat_origin, int x, int y);
     public native void MakeBinaryImage(long mat_gray, int addThreshold);
-    public native  int DeleteCoordinates(long mat_origin, int x, int y);
+    public native int DeleteCoordinates(long mat_origin, int x, int y);
+    public native void RollingBall(long mat_gray, int radius);
 
     private class MyRunnable implements Runnable{
 
