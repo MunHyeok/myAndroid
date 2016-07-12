@@ -43,7 +43,8 @@ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/obj/local/x86
  ../../sdk/native/jni/include/opencv2/imgproc/imgproc_c.h \
  ../../sdk/native/jni/include/opencv2/imgproc/types_c.h \
  ../../sdk/native/jni/include/opencv2/imgcodecs/imgcodecs_c.h \
- ../../sdk/native/jni/include/opencv2/videoio/videoio_c.h
+ ../../sdk/native/jni/include/opencv2/videoio/videoio_c.h \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Ball.h
 
 C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/RollingBall.h:
 
@@ -132,3 +133,5 @@ C:/Users/CHK/AppData/Local/Android/sdk/ndk-bundle/build//../sources/cxx-stl/gnu-
 ../../sdk/native/jni/include/opencv2/imgcodecs/imgcodecs_c.h:
 
 ../../sdk/native/jni/include/opencv2/videoio/videoio_c.h:
+
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Ball.h:

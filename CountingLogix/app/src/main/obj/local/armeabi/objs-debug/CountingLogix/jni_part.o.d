@@ -63,7 +63,8 @@ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/obj/local/arm
  ../../sdk/native/jni/include/opencv2/highgui/highgui.hpp \
  ../../sdk/native/jni/include/opencv2/highgui.hpp \
  ../../sdk/native/jni/include/opencv2/imgcodecs.hpp \
- ../../sdk/native/jni/include/opencv2/videoio.hpp
+ ../../sdk/native/jni/include/opencv2/videoio.hpp \
+ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Ball.h
 
 C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/ColonyCalculator.h:
 
@@ -192,3 +193,5 @@ C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/RollingBa
 ../../sdk/native/jni/include/opencv2/imgcodecs.hpp:
 
 ../../sdk/native/jni/include/opencv2/videoio.hpp:
+
+C:/Users/CHK/Documents/GitHub/myAndroid/CountingLogix/app/src/main/jni/Ball.h:

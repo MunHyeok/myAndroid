@@ -277,7 +277,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
             switch(event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                 {
-                    AddTouchedCoordinate(event);
+                    addTouchedCoordinate(event);
                     break;
                 }
             }
@@ -317,7 +317,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         selectRange = true;
     }
 
-    private void AddTouchedCoordinate(MotionEvent event){
+    private void addTouchedCoordinate(MotionEvent event){
         int[] viewCoords = new int[2];
         iv_colony.getLocationOnScreen(viewCoords);
         realX = (int) event.getX();
@@ -484,13 +484,7 @@ private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         int imageWidth = image_bitmap.getWidth();
         int imageHeight = image_bitmap.getHeight();
         int deviceWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-        int deviceHeight;
-        if (GlobalInfo.diagonalInches>=6.5){
-            deviceHeight = Resources.getSystem().getDisplayMetrics().heightPixels - (getActionBar().getHeight() + getStatusBarHeight());
-
-        }else{
-            deviceHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-        }
+        int deviceHeight = getDeviceHeight();
 
 
         if(imageWidth > deviceWidth || imageHeight > deviceHeight){
